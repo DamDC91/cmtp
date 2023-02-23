@@ -21,7 +21,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("HelloWorld")
+    mainClass.set("cmtp.HelloWorld")
 }
 
 sourceSets {
