@@ -2,6 +2,7 @@ plugins {
     id("java")
     id("application")
     id("org.openjfx.javafxplugin") version("0.0.13")
+    id("org.unbroken-dome.xjc") version ("2.0.0")
 }
 
 repositories {
@@ -35,3 +36,10 @@ sourceSets {
         //}
     }
 }
+
+
+
+xjc {
+    srcDirName.set("schemas")
+}
+
