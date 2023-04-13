@@ -1,5 +1,5 @@
 package cmtp;
- 
+
 import java.io.File;
 
 import javax.xml.bind.JAXBContext;
@@ -17,13 +17,13 @@ public class HelloWorld extends Application
 
     public static void main(String[] args) 
     {
-    	
+
         launch(args);
         try {
 	        JAXBContext jc = JAXBContext.newInstance(Msg.class);
-	
+
 	        Unmarshaller unmarshaller = jc.createUnmarshaller();
-	        File xml = new File("put your xml file path here");
+	        File xml = new File("../message-specs/test/kernel/question1.xml");
 	        Msg Message = (Msg) unmarshaller.unmarshal(xml);
 	        System.out.println(Message.getHeader().getFrom());
 		}
@@ -33,7 +33,7 @@ public class HelloWorld extends Application
     }
 
     @Override
-    public void start(Stage primaryStage) 
+    public void start(Stage primaryStage)
     {
         primaryStage.setTitle("TCMP MC");
         Parent root = null;

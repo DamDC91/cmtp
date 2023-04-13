@@ -10,7 +10,7 @@ repositories {
 }
 
 javafx {
-    version = "11"
+    version = "17"
     modules = mutableListOf("javafx.controls", "javafx.fxml")
 }
 
@@ -37,9 +37,7 @@ sourceSets {
     }
 }
 
-
-
 xjc {
-    srcDirName.set("schemas")
+    srcDirName.set("../../../message-specs/schemas")
 }
 
