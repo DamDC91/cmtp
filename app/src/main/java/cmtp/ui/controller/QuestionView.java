@@ -22,9 +22,15 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.paint.Color;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class QuestionView {
-	
+
 	private void addCheckboxGroup(Pane pane, CheckboxGroup checkboxGroup)
 	{
 		for(Checkbox c : checkboxGroup.getCheckbox())
@@ -53,25 +59,30 @@ public class QuestionView {
 	
 	private void addEmailInput(Pane pane, EmailInput emailInput)
 	{
-		addTextUserInput(pane, emailInput.getLabel());
+		addTextUserInput(pane, emailInput.getLabel(), "^([0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9})$");
 	}
 	
 	private void addPhoneNumberInput(Pane pane, PhoneNumberInput phoneNumberInput)
 	{
-		addTextUserInput(pane, phoneNumberInput.getLabel());
+		addTextUserInput(pane, phoneNumberInput.getLabel(), "\\+?\\d{10,14}$");
 	}
 	
 	private void addDecimalInput(Pane pane, DecimalInput decimalInput)
 	{
-		addTextUserInput(pane, decimalInput.getLabel());
+		addTextUserInput(pane, decimalInput.getLabel(), "^\\-?((\\d+\\.?\\d*)|(\\.\\d+))([Ee][+-]?\\d+)?$");
 	}
 	
 	private void addIntegerInput(Pane pane, IntegerInput integerInput)
 	{
-		addTextUserInput(pane, integerInput.getLabel());
+		addTextUserInput(pane, integerInput.getLabel(), "^\\-?\\d+$");
 	}
 	
 	private void addTextUserInput(Pane pane, String label)
+	{
+		addTextUserInput(pane, label, "");
+	}
+	
+	private void addTextUserInput(Pane pane, String label, String regex)
 	{
 		Node paneChild = null;
 		TextField input = new TextField();
@@ -84,6 +95,18 @@ public class QuestionView {
 		else
 		{			
 			paneChild = input;
+		}
+		if(!regex.isBlank())
+		{
+			Pattern pattern = Pattern.compile(regex);
+			input.setOnAction(e -> { 
+				Matcher matcher = pattern.matcher(input.getText());
+				if(!matcher.matches())
+					input.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
+				else
+					input.setBorder(null);
+			});
+
 		}
 		pane.getChildren().add(paneChild);
 	}
