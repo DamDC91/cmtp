@@ -1,11 +1,17 @@
-package cmtp.ui.controller;
+package cmtp.controller;
 
 
+import java.io.IOException;
+
+import cmtp.view.MessageView;
 import generated.Conv;
 import generated.Msg;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.VBox;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.StackPane;
 
 public class AppController {
@@ -14,31 +20,45 @@ public class AppController {
     private VBox convList;
     
     @FXML
-    private VBox mailList;
+    private ScrollPane mainPane;
 
     @FXML
 	private void initialize() {
     	// TODO Load 
     }
-            
+    
+    public void OnCreateConversationCliked()
+    {
+    	Parent root = null;
+    	FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/conversation_creation.fxml"));
+    	try {
+			root = fxmlLoader.load();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	mainPane.setContent(root);
+    }
+
     public void loadConversationMessages(Conv c) {
     	// TODO: Reloading the conv using its id
     	// New messages received after the application started will not being displayed
     	
     	c.getMsg().sort ((Msg a, Msg b) -> a.getHeader().getDate().compare(b.getHeader().getDate()));
-    	MessageView mv = new MessageView();
-    	mailList.getChildren().clear();
+    	MessageView mv = new MessageView();    	
+    	VBox vbox = new VBox();    	
     	for(Msg m : c.getMsg()) 
     	{
-    		mailList.getChildren().add(mv.addMessage(m));
+    		vbox.getChildren().add(mv.addMessage(m));
     	}
+    	mainPane.setContent(vbox);
     }
-    
-    
+
+
     public void addConversationButton(Conv c) {
     	Label label = new Label("conv id: " + c.getId().toString());
     	StackPane stackPane = new StackPane(label);
-    	stackPane.getStyleClass().add("convButton");
+    	stackPane.getStyleClass().add("button");
+    	stackPane.setId("largeButton");    	
     	stackPane.setOnMouseClicked(e -> { loadConversationMessages(c); });
     	convList.getChildren().add(stackPane);
     }

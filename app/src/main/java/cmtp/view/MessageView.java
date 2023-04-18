@@ -1,4 +1,4 @@
-package cmtp.ui.controller;
+package cmtp.view;
 
 import generated.Form;
 import generated.Msg;

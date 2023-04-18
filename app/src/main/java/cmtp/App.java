@@ -5,7 +5,7 @@ import java.io.File;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
-import cmtp.ui.controller.AppController;
+import cmtp.controller.AppController;
 import generated.Conv;
 import javafx.application.Application;
 import javafx.scene.Scene;
