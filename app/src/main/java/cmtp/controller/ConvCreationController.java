@@ -1,14 +1,15 @@
 package cmtp.controller;
 
-import java.util.ArrayList;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
-import cmtp.AccessingAllClassesInPackage;
+import cmtp.AbstractPlugin;
+import cmtp.plugin.PluginManager;
+import generated.Form;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 public class ConvCreationController {
@@ -24,7 +25,7 @@ public class ConvCreationController {
 	
 	 @FXML
 	 private void initialize() {
-		 Set<String> plugins = AccessingAllClassesInPackage.findAllClasses("cmtp.plugin");
+		 Set<String> plugins = PluginManager.getAllPlugins();
 		 for(String name : plugins)
 		 {
 			 pluginChoiceBox.getItems().add(name);
@@ -39,8 +40,19 @@ public class ConvCreationController {
 	 
 	 public void onAddPluginCliked()
 	 {
-		 // TODO
-		 System.out.println("Adding plugin: "+ pluginChoiceBox.getSelectionModel().getSelectedItem());
+		 if(!pluginChoiceBox.getSelectionModel().isEmpty())
+		 {
+			 System.out.println("Adding plugin: "+ pluginChoiceBox.getSelectionModel().getSelectedItem());		
+			 try {
+				 Form f = PluginManager.getPlugin(pluginChoiceBox.getSelectionModel().getSelectedItem()).getDeclaredConstructor().newInstance().getForm();
+				 // TODO Add form to vbox
+				 System.out.println(f.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			 pluginChoiceBox.getSelectionModel().clearSelection();
+		}
+		
 	 }
 	 
 

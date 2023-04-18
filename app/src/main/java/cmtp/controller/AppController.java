@@ -2,7 +2,6 @@ package cmtp.controller;
 
 
 import java.io.IOException;
-
 import cmtp.view.MessageView;
 import generated.Conv;
 import generated.Msg;

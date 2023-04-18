@@ -1,17 +1,13 @@
 package cmtp;
 
-import java.io.File;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
-
+import java.math.BigInteger;
 import cmtp.controller.AppController;
-import generated.Conv;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
+import cmtp.repository.ModelManager;
  
 public class App extends Application 
 {
@@ -44,19 +40,10 @@ public class App extends Application
     
     
     // Testing purpose only
-    private void addConv(AppController w) 
+    private void addConv(AppController c) 
     {
-        try {
-	        JAXBContext jc = JAXBContext.newInstance(Conv.class);
+    	ModelManager manager = new ModelManager("repository");
+    	c.addConversationButton(manager.getConv(new BigInteger("1")));
 
-	        Unmarshaller unmarshaller = jc.createUnmarshaller();
-	        File xml = new File("../message-specs/test/kernel/question1.xml");
-	        Conv conv= (Conv) unmarshaller.unmarshal(xml);
-	        w.addConversationButton(conv);
-	        w.addConversationButton(conv);
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
     }
 }
