@@ -3,43 +3,36 @@ package cmtp.view;
 import java.util.function.Consumer;
 
 import generated.Form;
-import generated.Msg;
 import generated.Question;
-import generated.Reply;
-import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class MessageView {
-	
+public class FormEditView {
+
 	private Consumer<Question> handler;
 	
-	public MessageView()
+	public FormEditView()
 	{
 		this.handler = null;
 	}
 	
-	public MessageView(Consumer<Question> handler)
+	public FormEditView(Consumer<Question> handler)
 	{
 		this.handler = handler;
 	}
 	
-	private void addReply(Pane pane, Reply reply)
-    {
-		//TODO
-    }
-    
+	
     private void addQuestion(Pane pane, Question question)
-    { 	
-    	pane.getChildren().add(new QuestionFeedView(handler).addQuestion(question));
+    {
+    	pane.getChildren().add(new AnswerEditView().addQuestion(question));
     }
     
     private void addForm(Pane pane, Form form)
     {
-    	pane.getChildren().add(new FormFeedView(handler).addForm(form));
+    	pane.getChildren().add(new FormEditView(handler).addForm(form));
     }
     
     private void addText(Pane pane, String string)
@@ -63,29 +56,20 @@ public class MessageView {
     	{
     		addQuestion(pane, (Question)o);
     	}
-    	else if(o instanceof Reply)
-    	{
-    		//TODO
-    	}
     }
-    
-    public Pane addMessage(Msg msg)
-    {
-    	VBox vbox = new VBox(8);
+	
+	public Pane addForm(Form f)
+	{
+		VBox vbox = new VBox();
 		Pane pane = new AnchorPane(vbox);
-		vbox.setPadding(new Insets(5, 5, 5, 10));
 		
-		Label labelFrom = new Label("from: " + msg.getHeader().getFrom());
-		labelFrom.setLayoutX(25.0);
-		labelFrom.setLayoutY(45.0);
-		labelFrom.setPadding(new Insets(10, 0, 10, 0));
-		vbox.getChildren().add(labelFrom);
-		
-		for(Object o : msg.getData().getQuestionOrReplyOrForm())
+		if(!f.getTitle().isBlank()) 
 		{
-			dispatch(vbox, o);
+			Label label = new Label(f.getTitle());
+			vbox.getChildren().add(label);
 		}
+		for(Object o : f.getQuestionOrTextOrForm())
+			dispatch(vbox, o);
 		return pane;
-    }
-
+	}
 }

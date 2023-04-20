@@ -8,10 +8,15 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import cmtp.view.ExpandableTextArea?>
 
-
-<VBox fx:id="vbox" prefHeight="293.0" prefWidth="260.0" spacing="10.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cmtp.controller.ConvCreationController">
+<VBox fx:id="vbox" prefHeight="293.0" prefWidth="260.0" spacing="10.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cmtp.controller.MessageEditController">
    <children>
+      <TextField fx:id="writterTextField" promptText="from">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </TextField>
       <HBox spacing="6.0">
          <children>
             <TextField fx:id="recipientTextField" promptText="To" />
@@ -25,7 +30,7 @@
             <Insets />
          </VBox.margin>
       </HBox>
-      <TextArea prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+      <ExpandableTextArea />
       <HBox spacing="6.0">
          <children>
             <ChoiceBox fx:id="pluginChoiceBox" prefWidth="150.0" />

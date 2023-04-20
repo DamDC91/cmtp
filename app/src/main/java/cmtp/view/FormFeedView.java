@@ -1,22 +1,38 @@
 package cmtp.view;
 
+import java.util.function.Consumer;
+
 import generated.Form;
 import generated.Question;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class FormView {
+public class FormFeedView {
 
+	private Consumer<Question> handler;
+	
+	public FormFeedView()
+	{
+		this.handler = null;
+	}
+	
+	public FormFeedView(Consumer<Question> handler)
+	{
+		this.handler = handler;
+	}
+	
+	
     private void addQuestion(Pane pane, Question question)
     {
-    	pane.getChildren().add(new QuestionView().addQuestion(question));
+    	pane.getChildren().add(new QuestionFeedView(handler).addQuestion(question));
     }
     
     private void addForm(Pane pane, Form form)
     {
-    	pane.getChildren().add(new FormView().addForm(form));
+    	pane.getChildren().add(new FormFeedView(handler).addForm(form));
     }
     
     private void addText(Pane pane, String string)
@@ -45,7 +61,7 @@ public class FormView {
 	public Pane addForm(Form f)
 	{
 		VBox vbox = new VBox();
-		Pane pane = new Pane(vbox);
+		Pane pane = new AnchorPane(vbox);
 		
 		if(!f.getTitle().isBlank()) 
 		{

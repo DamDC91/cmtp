@@ -23,33 +23,24 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.paint.Color;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-public class QuestionView {
+public class AnswerEditView {
 	
-	private boolean editable;
+	private TextField input = null;
 	
-	public QuestionView(boolean editable)
-	{
-		this.editable = editable;
-	}
-	
-	public QuestionView()
-	{}
-	
-	
-
 	private void addCheckboxGroup(Pane pane, CheckboxGroup checkboxGroup)
 	{
 		for(Checkbox c : checkboxGroup.getCheckbox())
 		{			
 			CheckBox but = new CheckBox(c.getLabel());
 			pane.getChildren().add(but);
-		}		
+		}
 	}
 	
 
@@ -97,7 +88,7 @@ public class QuestionView {
 	private void addTextUserInput(Pane pane, String label, String regex)
 	{
 		Node paneChild = null;
-		TextField input = new TextField();
+		input = new TextField();
 		if(label != null && !label.isBlank())
 		{
 			Label l = new Label(label);
@@ -178,7 +169,7 @@ public class QuestionView {
 	public Pane addQuestion(Question q)
 	{
 		VBox vbox = new VBox();
-		Pane pane = new Pane(vbox);
+		Pane pane = new AnchorPane(vbox);
 		
 		if(!q.getText().isBlank()) 
 		{
@@ -189,4 +180,11 @@ public class QuestionView {
 		return pane;
 	}
 
+	
+	public String getStringResult()
+	{
+		if(input != null)
+			return input.getText();
+		return null;
+	}
 }

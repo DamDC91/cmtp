@@ -1,13 +1,10 @@
 package cmtp;
 
-import java.math.BigInteger;
-import cmtp.controller.AppController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
-import cmtp.repository.ModelManager;
  
 public class App extends Application 
 {
@@ -25,8 +22,6 @@ public class App extends Application
         try{
         	FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/main_view.fxml"));
         	root = fxmlLoader.load();
-        	AppController controller = fxmlLoader.getController();
-        	
         }
         catch (Exception e) {
             e.printStackTrace();
