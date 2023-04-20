@@ -20,7 +20,7 @@ public class App extends Application
     @Override
     public void start(Stage primaryStage)
     {
-        primaryStage.setTitle("TCMP MC");
+        primaryStage.setTitle("CMTP MC");
         Parent root = null;
         try{
         	FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/main_view.fxml"));

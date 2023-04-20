@@ -8,5 +8,5 @@ Complex Mail Transfer Protocol
 
 ## Run
 ```console
-./gradlew build
+./gradlew run
 ```
