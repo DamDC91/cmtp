@@ -1,16 +1,15 @@
 package cmtp.controller;
 
 
-import java.io.IOException;
+import cmtp.repository.ModelManager;
 import cmtp.view.MessageView;
 import generated.Conv;
 import generated.Msg;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.VBox;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.StackPane;
 
 public class AppController {
@@ -20,22 +19,22 @@ public class AppController {
     
     @FXML
     private ScrollPane mainPane;
+    
+    private TextInputDialog convNameInputDialog = new TextInputDialog();
+    
+    private ModelManager manager = new ModelManager("repository");
 
     @FXML
 	private void initialize() {
-    	// TODO Load 
+    	convNameInputDialog.setHeaderText("Conversation name");
+    	for(Conv v : manager.getAllConv())
+    		addConversationButton(v);
     }
     
     public void OnCreateConversationCliked()
-    {
-    	Parent root = null;
-    	FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/conversation_creation.fxml"));
-    	try {
-			root = fxmlLoader.load();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-    	mainPane.setContent(root);
+    {    	
+    	convNameInputDialog.showAndWait();
+    	addConversationButton(manager.createConvAndSave(convNameInputDialog.getEditor().getText()));
     }
 
     public void loadConversationMessages(Conv c) {
@@ -53,7 +52,7 @@ public class AppController {
     }
 
 
-    public void addConversationButton(Conv c) {
+    private void addConversationButton(Conv c) {
     	Label label = new Label("conv id: " + c.getId().toString());
     	StackPane stackPane = new StackPane(label);
     	stackPane.getStyleClass().add("button");

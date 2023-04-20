@@ -2,6 +2,7 @@ package cmtp.repository;
 
 import java.io.File;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 import generated.Conv;
+import generated.Msg;
 
 public class ModelManager {
 	
@@ -44,7 +46,7 @@ public class ModelManager {
 			try {
 				JAXBContext jc = JAXBContext.newInstance(Conv.class);
 				Unmarshaller unmarshaller = jc.createUnmarshaller();
-				conv= (Conv) unmarshaller.unmarshal(conversationFiles.get(id));
+				conv = (Conv) unmarshaller.unmarshal(conversationFiles.get(id));
 			} catch (JAXBException e) {
 				e.printStackTrace();
 			}
@@ -52,12 +54,23 @@ public class ModelManager {
         return conv;
 	}
 	
-	public void addConv(Conv c)
+	public ArrayList<Conv> getAllConv()
 	{
-		//TODO
+		return new ArrayList<Conv>();
 	}
 	
+	public Conv createConvAndSave(String convName)
+	{
+		//TODO
+		Conv v = new Conv();
+		v.setId(new BigInteger("0"));
+		return v;
+	}
 	
+	public void addMsg(Msg msg)
+	{
+		// TODO use msg.conv_id
+	}
 	
 
 }

@@ -26,7 +26,6 @@ public class App extends Application
         	FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/main_view.fxml"));
         	root = fxmlLoader.load();
         	AppController controller = fxmlLoader.getController();
-        	addConv(controller);
         	
         }
         catch (Exception e) {
@@ -39,11 +38,4 @@ public class App extends Application
     }
     
     
-    // Testing purpose only
-    private void addConv(AppController c) 
-    {
-    	ModelManager manager = new ModelManager("repository");
-    	c.addConversationButton(manager.getConv(new BigInteger("1")));
-
-    }
 }
