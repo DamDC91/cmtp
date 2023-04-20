@@ -23,8 +23,16 @@ public class ModelManager
     private File convDirectory;
     private Map<BigInteger,File> conversationFiles;
     private BigInteger maxConvId;
+    static private final String dirPath = "repository";
     
-    public ModelManager(String dirPath)
+    static private ModelManager instance = new ModelManager();
+    
+    static public ModelManager getInstance()
+    {
+    	return instance;
+    }
+    
+    private ModelManager()
     {
         this.convDirectory = new File(dirPath);
         this.conversationFiles = getAllFiles(convDirectory);

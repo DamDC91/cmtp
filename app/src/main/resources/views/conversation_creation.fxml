@@ -30,7 +30,7 @@
             <Insets />
          </VBox.margin>
       </HBox>
-      <ExpandableTextArea />
+      <ExpandableTextArea fx:id="firstExpandableTextArea" />
       <HBox spacing="6.0">
          <children>
             <ChoiceBox fx:id="pluginChoiceBox" prefWidth="150.0" />
@@ -40,5 +40,6 @@
             <Insets />
          </VBox.margin>
       </HBox>
+      <Button mnemonicParsing="false" onAction="#onSendCliked" text="send" />
    </children>
 </VBox>

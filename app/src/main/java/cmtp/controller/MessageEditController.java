@@ -1,14 +1,23 @@
 package cmtp.controller;
 
 import java.util.Set;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.GregorianCalendar;
 
 import cmtp.plugin.PluginManager;
+import cmtp.repository.ModelManager;
+import cmtp.repository.ModelManager.UnknownConversation;
 import cmtp.view.ExpandableTextArea;
 import cmtp.view.FormEditView;
 import javafx.fxml.FXML;
@@ -34,6 +43,9 @@ public class MessageEditController {
 	@FXML
 	private VBox vbox;
 	
+	@FXML
+	private ExpandableTextArea firstExpandableTextArea;
+	
 	
 	private Set<String> recipientNames;
 	
@@ -43,10 +55,13 @@ public class MessageEditController {
 	
 	private ArrayList<Object> msgElements;
 	
+	private BigInteger convId;
+	
 	 @FXML
 	 private void initialize() {
 		 recipientNames = new HashSet<String>();
 		 msgElements = new ArrayList<Object>();
+		 msgElements.add(firstExpandableTextArea);
 		 answerToQuestion = new HashMap<AnswerEditView, Question>();
 		 Set<String> plugins = PluginManager.getAllPlugins();
 		 for(String name : plugins)		 
@@ -73,10 +88,10 @@ public class MessageEditController {
 			try {
 				 Form f = PluginManager.getPlugin(pluginChoiceBox.getSelectionModel().getSelectedItem()).getDeclaredConstructor().newInstance().getForm();
 				 msgElements.add(f);
-				 vbox.getChildren().add(vbox.getChildren().size()-1, new FormEditView().addForm(f));				 
+				 vbox.getChildren().add(vbox.getChildren().size()-2, new FormEditView().addForm(f));				 
 				 ExpandableTextArea text = new ExpandableTextArea("", true, false, 3, 300);
 				 msgElements.add(text);
-				 vbox.getChildren().add(vbox.getChildren().size()-1, text);
+				 vbox.getChildren().add(vbox.getChildren().size()-2, text);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -84,26 +99,39 @@ public class MessageEditController {
 		 }		
 	 }
 	 
-	 
+	 public void setConvId(BigInteger id)
+	 {
+		 this.convId = id;
+	 }
 	 
 	 public void addEditQuestion(Question q)
 	 {
 		 AnswerEditView answerView = new AnswerEditView();
 		 msgElements.add(answerView);
 		 answerToQuestion.put(answerView, q);
-		 vbox.getChildren().add(vbox.getChildren().size()-1, answerView.addQuestion(q));
+		 vbox.getChildren().add(vbox.getChildren().size()-2, answerView.addQuestion(q));
 		 ExpandableTextArea text = new ExpandableTextArea("", true, false, 3, 300);
-		 vbox.getChildren().add(vbox.getChildren().size()-1, text);
+		 vbox.getChildren().add(vbox.getChildren().size()-2, text);
 		 msgElements.add(text);
 	 }
 	 
 	 
-	 public Msg createMsg(BigInteger id)
+	 
+	 public Msg createMsg()
 	 {
 		 Msg msg = new Msg();
-		 msg.setConvId(id);
+		 msg.setConvId(convId);
 		 Msg.Header header = new Msg.Header();
-		 header.setDate(null); //TODO
+		 GregorianCalendar cal = new GregorianCalendar();
+		 cal.setTime(new Date());
+		 XMLGregorianCalendar xCal = null;
+		try {
+			xCal = DatatypeFactory.newInstance()
+			     .newXMLGregorianCalendar(cal);
+		} catch (DatatypeConfigurationException e) {
+			e.printStackTrace();
+		}
+		 header.setDate(xCal);
 		 header.setFrom(writterTextField.getText());
 		 header.setTo(String.join(",", recipientNames));
 		 msg.setHeader(header);
@@ -153,8 +181,17 @@ public class MessageEditController {
 				 data.getQuestionOrReplyOrForm().add(reply);
 			 }
 		 }
+		 msg.setData(data);
 		 return msg;
 	 }
 	 
-	 
+	 public void onSendCliked()
+	 {
+		 try {
+			ModelManager.getInstance().addMsg(createMsg());
+		} catch (UnknownConversation e) {			
+			e.printStackTrace();
+		}
+		// TODO reset everything to initial state
+	 }
 }

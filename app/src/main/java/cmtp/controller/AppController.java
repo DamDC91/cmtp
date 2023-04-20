@@ -29,16 +29,14 @@ public class AppController {
     @FXML
     private ScrollPane editPane;
     
-    private TextInputDialog convNameInputDialog = new TextInputDialog();
-    
-    private ModelManager manager = new ModelManager("repository");
+    private TextInputDialog convNameInputDialog = new TextInputDialog();    
     
     private MessageEditController editController = null;
 
     @FXML
 	private void initialize() {
     	convNameInputDialog.setHeaderText("Conversation name");
-    	for(Conv v : manager.getAllConv())
+    	for(Conv v : ModelManager.getInstance().getAllConv())
     		addConversationButton(v);
     }
     
@@ -47,7 +45,7 @@ public class AppController {
     	convNameInputDialog.showAndWait();
     	String result = convNameInputDialog.getResult();
     	if(result != null && !result.isBlank())
-    		addConversationButton(manager.createConvAndSave(result));
+    		addConversationButton(ModelManager.getInstance().createConvAndSave(result));
     }
     
     
@@ -62,6 +60,7 @@ public class AppController {
     	try {
 			root = fxmlLoader.load();
 			editController = fxmlLoader.getController();
+			editController.setConvId(c.getId());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
