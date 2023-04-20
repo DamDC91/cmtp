@@ -61,4 +61,5 @@ public class AppController {
     	stackPane.setOnMouseClicked(e -> { loadConversationMessages(c); });
     	convList.getChildren().add(stackPane);
     }
+    
 }

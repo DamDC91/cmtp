@@ -5,6 +5,7 @@ import java.util.Set;
 
 import cmtp.AbstractPlugin;
 import cmtp.plugin.PluginManager;
+import cmtp.view.FormView;
 import generated.Form;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
@@ -45,7 +46,7 @@ public class ConvCreationController {
 			 System.out.println("Adding plugin: "+ pluginChoiceBox.getSelectionModel().getSelectedItem());		
 			 try {
 				 Form f = PluginManager.getPlugin(pluginChoiceBox.getSelectionModel().getSelectedItem()).getDeclaredConstructor().newInstance().getForm();
-				 // TODO Add form to vbox
+				 vbox.getChildren().add(vbox.getChildren().size()-1, new FormView().addForm(f));
 				 System.out.println(f.toString());
 			} catch (Exception e) {
 				e.printStackTrace();

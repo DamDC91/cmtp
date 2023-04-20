@@ -30,6 +30,18 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 public class QuestionView {
+	
+	private boolean editable;
+	
+	public QuestionView(boolean editable)
+	{
+		this.editable = editable;
+	}
+	
+	public QuestionView()
+	{}
+	
+	
 
 	private void addCheckboxGroup(Pane pane, CheckboxGroup checkboxGroup)
 	{

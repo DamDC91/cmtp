@@ -52,6 +52,11 @@ public class ModelManager {
         return conv;
 	}
 	
+	public void addConv(Conv c)
+	{
+		//TODO
+	}
+	
 	
 	
 
