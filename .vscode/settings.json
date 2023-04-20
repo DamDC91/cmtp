@@ -1,4 +1,9 @@
 {
     "java.configuration.updateBuildConfiguration": "automatic",
-    "java.import.generatesMetadataFilesAtProjectRoot": true
+    "java.import.generatesMetadataFilesAtProjectRoot": true,
+    "java.project.sourcePaths": [
+        "build\\generated\\sources\\xjc\\java",
+        "src"
+    ],
+    "java.compile.nullAnalysis.mode": "automatic"
 }
