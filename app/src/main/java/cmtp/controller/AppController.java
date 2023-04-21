@@ -25,6 +25,8 @@ import javafx.scene.layout.StackPane;
 import javafx.fxml.FXMLLoader;
 import cmtp.repository.ReferenceResolver;
 import cmtp.view.QuestionFeedView;
+import cmtp.view.ReplyView;
+import java.util.Optional;
 
 public class AppController {
 	
@@ -69,7 +71,6 @@ public class AppController {
     		for(Object o : msg.getData().getQuestionOrReplyOrForm())
     			if(o instanceof Reply)
     				replies.add((Reply)o);
-    	System.out.println("reply size" + replies.size());
     	return replies;
     }
     
@@ -121,11 +122,10 @@ public class AppController {
 		}
     	
     	c.getMsg().sort ((Msg a, Msg b) -> a.getHeader().getDate().compare(b.getHeader().getDate()));
-
-    	MessageView mv = new MessageView(x -> editController.addEditQuestion(x));    	
+	
     	VBox vbox = new VBox();    	
     	for(Msg m : c.getMsg()) 
-    		vbox.getChildren().add(mv.addMessage(m));
+    		vbox.getChildren().add(new MessageView(c, m, x -> editController.addEditQuestion(x)));
     	
     	mainPane.setContent(vbox);
     	editPane.setContent(root);
@@ -135,12 +135,19 @@ public class AppController {
     	questionFeed.getChildren().add(l);
     	for(QuestionWithIds q : getAllQuestionsUnanswered(c))
     	{
-    		QuestionFeedView v = new QuestionFeedView(x -> editController.addEditQuestion(x), q.getParentIdList());
-    		questionFeed.getChildren().add(v.addQuestion(q.getQuestion()));
+    		QuestionFeedView v = new QuestionFeedView(x -> editController.addEditQuestion(x), q.getParentIdList(), q.getQuestion());
+    		questionFeed.getChildren().add(v);
     	}
     	
-    	
-    	
+    	l =(Label) answerFeed.getChildren().get(0);
+    	answerFeed.getChildren().clear();
+    	answerFeed.getChildren().add(l);
+    	for(Reply r : getAllReplies(c))
+    	{
+    		Optional<Question> q = ReferenceResolver.getQuestion(c, r);
+    		if(q.isPresent())
+    			answerFeed.getChildren().add(new ReplyView(r, q.get()));
+    	}
     }
 
 

@@ -1,7 +1,5 @@
 package cmtp.view;
 
-import java.util.function.Consumer;
-
 import generated.Form;
 import generated.Question;
 import javafx.scene.control.Label;
@@ -10,29 +8,16 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class FormEditView {
-
-	private Consumer<Question> handler;
-	
-	public FormEditView()
-	{
-		this.handler = null;
-	}
-	
-	public FormEditView(Consumer<Question> handler)
-	{
-		this.handler = handler;
-	}
-	
+public class FormEditView extends AnchorPane {
 	
     private void addQuestion(Pane pane, Question question)
     {
-    	pane.getChildren().add(new AnswerEditView().addQuestion(question));
+    	pane.getChildren().add(new AnswerEditView(question));
     }
     
     private void addForm(Pane pane, Form form)
     {
-    	pane.getChildren().add(new FormEditView(handler).addForm(form));
+    	pane.getChildren().add(new FormEditView(form));
     }
     
     private void addText(Pane pane, String string)
@@ -58,10 +43,11 @@ public class FormEditView {
     	}
     }
 	
-	public Pane addForm(Form f)
+    
+	public FormEditView(Form f)
 	{
+		super();
 		VBox vbox = new VBox();
-		Pane pane = new AnchorPane(vbox);
 		
 		if(!f.getTitle().isBlank()) 
 		{
@@ -70,6 +56,6 @@ public class FormEditView {
 		}
 		for(Object o : f.getQuestionOrTextOrForm())
 			dispatch(vbox, o);
-		return pane;
+		this.getChildren().add(vbox);
 	}
 }

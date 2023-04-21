@@ -88,7 +88,7 @@ public class MessageEditController {
 			try {
 				 Form f = PluginManager.getPlugin(pluginChoiceBox.getSelectionModel().getSelectedItem()).getDeclaredConstructor().newInstance().getForm();
 				 msgElements.add(f);
-				 vbox.getChildren().add(vbox.getChildren().size()-2, new FormEditView().addForm(f));				 
+				 vbox.getChildren().add(vbox.getChildren().size()-2, new FormEditView(f));				 
 				 ExpandableTextArea text = new ExpandableTextArea("", true, false, 3, 300);
 				 msgElements.add(text);
 				 vbox.getChildren().add(vbox.getChildren().size()-2, text);
@@ -106,10 +106,10 @@ public class MessageEditController {
 	 
 	 public void addEditQuestion(QuestionWithIds q)
 	 {
-		 AnswerEditView answerView = new AnswerEditView();
+		 AnswerEditView answerView = new AnswerEditView(q.getQuestion());
 		 msgElements.add(answerView);
 		 answerToQuestion.put(answerView, q);
-		 vbox.getChildren().add(vbox.getChildren().size()-2, answerView.addQuestion(q.getQuestion()));
+		 vbox.getChildren().add(vbox.getChildren().size()-2, answerView);
 		 ExpandableTextArea text = new ExpandableTextArea("", true, false, 3, 300);
 		 vbox.getChildren().add(vbox.getChildren().size()-2, text);
 		 msgElements.add(text);

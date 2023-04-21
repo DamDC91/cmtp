@@ -3,6 +3,7 @@ package cmtp.view;
 import java.util.function.Consumer;
 
 import cmtp.controller.QuestionWithIds;
+import generated.Conv;
 import generated.Form;
 import generated.Msg;
 import generated.Question;
@@ -14,35 +15,30 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.math.BigInteger;
+import cmtp.repository.ReferenceResolver;
 
-public class MessageView {
+public class MessageView extends AnchorPane {
 	
 	private Consumer<QuestionWithIds> handler;
-	
-	public MessageView()
-	{
-		this.handler = null;
-	}
-	
-	public MessageView(Consumer<QuestionWithIds> handler)
-	{
-		this.handler = handler;
-	}
+	private Conv currentConv;
 	
 	private void addReply(Pane pane, Reply reply)
     {
-		//TODO
+		Optional<Question> q = ReferenceResolver.getQuestion(currentConv, reply);
+		if(q.isPresent())
+			pane.getChildren().add(new ReplyView(reply, q.get()));
     }
     
     private void addQuestion(Pane pane, Question question)
     { 	
-    	pane.getChildren().add(new QuestionFeedView(handler, new ArrayList<BigInteger>()).addQuestion(question));
+    	pane.getChildren().add(new QuestionFeedView(handler, new ArrayList<BigInteger>(), question));
     }
     
     private void addForm(Pane pane, Form form)
     {
-    	pane.getChildren().add(new FormFeedView(handler, new ArrayList<BigInteger>()).addForm(form));
+    	pane.getChildren().add(new FormFeedView(handler, new ArrayList<BigInteger>(), form));
     }
     
     private void addText(Pane pane, String string)
@@ -68,14 +64,16 @@ public class MessageView {
     	}
     	else if(o instanceof Reply)
     	{
-    		//TODO
+    		addReply(pane, (Reply)o);
     	}
     }
     
-    public Pane addMessage(Msg msg)
+    public MessageView(Conv c, Msg msg, Consumer<QuestionWithIds> handler)
     {
+    	super();
+    	this.currentConv = c;
+    	this.handler = handler;
     	VBox vbox = new VBox(8);
-		Pane pane = new AnchorPane(vbox);
 		vbox.setPadding(new Insets(5, 5, 5, 10));
 		
 		Label labelFrom = new Label("from: " + msg.getHeader().getFrom());
@@ -88,7 +86,8 @@ public class MessageView {
 		{
 			dispatch(vbox, o);
 		}
-		return pane;
+		this.getChildren().add(vbox);
     }
+    
 
 }

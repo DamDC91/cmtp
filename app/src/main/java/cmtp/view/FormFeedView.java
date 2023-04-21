@@ -13,32 +13,24 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class FormFeedView {
+public class FormFeedView extends AnchorPane {
 
 	private Consumer<QuestionWithIds> handler;
 	private ArrayList<BigInteger> formIds;
 	private BigInteger currentFormId;
-	
-	
-	public FormFeedView(Consumer<QuestionWithIds> handler, ArrayList<BigInteger> formIds)
-	{
-		this.handler = handler;
-		this.formIds = formIds;
-	}
-	
-	
+		
     private void addQuestion(Pane pane, Question question)
     {
     	ArrayList<BigInteger> ids = (ArrayList<BigInteger>) formIds.clone();
     	ids.add(currentFormId);
-    	pane.getChildren().add(new QuestionFeedView(handler, ids).addQuestion(question));
+    	pane.getChildren().add(new QuestionFeedView(handler, ids, question));
     }
     
     private void addForm(Pane pane, Form form)
     {
     	ArrayList<BigInteger> ids = (ArrayList<BigInteger>) formIds.clone();
     	ids.add(currentFormId);
-    	pane.getChildren().add(new FormFeedView(handler, ids).addForm(form));
+    	pane.getChildren().add(new FormFeedView(handler, ids, form));
     }
     
     private void addText(Pane pane, String string)
@@ -64,10 +56,12 @@ public class FormFeedView {
     	}
     }
 	
-	public Pane addForm(Form f)
+	public FormFeedView(Consumer<QuestionWithIds> handler, ArrayList<BigInteger> formIds, Form f)
 	{
+		super();
+		this.handler = handler;
+		this.formIds = formIds;
 		VBox vbox = new VBox();
-		Pane pane = new AnchorPane(vbox);
 		
 		currentFormId = new BigInteger(f.getId());
 		
@@ -78,6 +72,6 @@ public class FormFeedView {
 		}
 		for(Object o : f.getQuestionOrTextOrForm())
 			dispatch(vbox, o);
-		return pane;
+		this.getChildren().add(vbox);
 	}
 }

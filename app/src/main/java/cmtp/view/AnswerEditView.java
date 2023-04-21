@@ -30,7 +30,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-public class AnswerEditView {
+public class AnswerEditView extends AnchorPane {
 	
 	private TextField input = null;
 	
@@ -166,10 +166,9 @@ public class AnswerEditView {
 		
 	}
 	
-	public Pane addQuestion(Question q)
+	public AnswerEditView(Question q)
 	{
 		VBox vbox = new VBox();
-		Pane pane = new AnchorPane(vbox);
 		
 		if(!q.getText().isBlank()) 
 		{
@@ -177,7 +176,7 @@ public class AnswerEditView {
 			vbox.getChildren().add(label);
 		}
 		dispatch(vbox, q);
-		return pane;
+		this.getChildren().add(vbox);
 	}
 
 	

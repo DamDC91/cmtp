@@ -13,22 +13,18 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.AnchorPane;
 
-public class QuestionFeedView {
+public class QuestionFeedView extends AnchorPane {
 	
 	private Consumer<QuestionWithIds> handler;
 	
 	private ArrayList<BigInteger> formIds;
 	
-	public QuestionFeedView(Consumer<QuestionWithIds> handler, ArrayList<BigInteger> formIds)
+	public QuestionFeedView(Consumer<QuestionWithIds> handler, ArrayList<BigInteger> formIds, Question q)
 	{
+		super();
 		this.handler = handler;
 		this.formIds = formIds;
-	}
-	
-	public Pane addQuestion(Question q)
-	{
 		HBox hbox = new HBox(10.0);
-		Pane pane = new AnchorPane(hbox);
 				
 		if(!q.getText().isBlank()) 
 		{
@@ -37,7 +33,7 @@ public class QuestionFeedView {
 			button.setOnAction(e -> handler.accept(new QuestionWithIds(q, formIds)));
 			hbox.getChildren().addAll(label, button);
 		}
-		return pane;
+		this.getChildren().add(hbox);
 	}
 
 }
