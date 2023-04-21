@@ -1,11 +1,10 @@
 package cmtp.view;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 
-import java.util.function.Consumer;
-
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.function.BiConsumer;
 import generated.Question;
 import javafx.scene.layout.Pane;
 import javafx.scene.control.Label;
@@ -14,16 +13,14 @@ import javafx.scene.layout.AnchorPane;
 
 public class QuestionFeedView {
 	
-	private Consumer<Question> handler;
+	private BiConsumer<Question, ArrayList<BigInteger>> handler;
 	
-	public QuestionFeedView()
-	{
-		this.handler = null;
-	}
+	private ArrayList<BigInteger> formId;
 	
-	public QuestionFeedView(Consumer<Question> handler)
+	public QuestionFeedView(BiConsumer<Question, ArrayList<BigInteger>> handler, ArrayList<BigInteger> formId)
 	{
 		this.handler = handler;
+		this.formId = formId;
 	}
 	
 	public Pane addQuestion(Question q)
@@ -35,7 +32,7 @@ public class QuestionFeedView {
 		{
 			Label label = new Label(q.getText());
 			Button button = new Button("respond");
-			button.setOnAction(e -> handler.accept(q));
+			button.setOnAction(e -> handler.accept(q, formId));
 			hbox.getChildren().addAll(label, button);
 		}
 		

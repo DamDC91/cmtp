@@ -136,20 +136,28 @@
                <children>
                   <ScrollPane VBox.vgrow="ALWAYS">
                      <content>
-                  <Label alignment="CENTER" style="&#10;" text="Questions" textAlignment="CENTER" wrapText="false">
-                           <font>
-                      <Font size="14.0" fx:id="x1" />
-                           </font>
-                        </Label>
+                        <VBox fx:id="questionFeed">
+                           <children>
+                        <Label alignment="CENTER" style="&#10;" text="Questions" textAlignment="CENTER" wrapText="false">
+                                 <font>
+                            <Font size="14.0" fx:id="x1" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
                      </content>
                   </ScrollPane>
                   <ScrollPane VBox.vgrow="ALWAYS">
                      <content>
-                        <Label alignment="CENTER" style="&#10;" text="Answers" textAlignment="CENTER" wrapText="false">
-                           <font>
-                              <Font size="14.0" fx:id="x13" />
-                           </font>
-                        </Label>
+                        <VBox fx:id="answerFeed">
+                           <children>
+                              <Label alignment="CENTER" style="&#10;" text="Answers" textAlignment="CENTER" wrapText="false">
+                                 <font>
+                                    <Font size="14.0" fx:id="x13" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
                      </content>
                   </ScrollPane>
                </children>
