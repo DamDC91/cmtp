@@ -2,6 +2,7 @@ package cmtp.view;
 
 import java.util.function.Consumer;
 
+import cmtp.controller.QuestionWithIds;
 import generated.Form;
 import generated.Msg;
 import generated.Question;
@@ -12,17 +13,19 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import java.util.ArrayList;
+import java.math.BigInteger;
 
 public class MessageView {
 	
-	private Consumer<Question> handler;
+	private Consumer<QuestionWithIds> handler;
 	
 	public MessageView()
 	{
 		this.handler = null;
 	}
 	
-	public MessageView(Consumer<Question> handler)
+	public MessageView(Consumer<QuestionWithIds> handler)
 	{
 		this.handler = handler;
 	}
@@ -34,12 +37,12 @@ public class MessageView {
     
     private void addQuestion(Pane pane, Question question)
     { 	
-    	pane.getChildren().add(new QuestionFeedView(handler).addQuestion(question));
+    	pane.getChildren().add(new QuestionFeedView(handler, new ArrayList<BigInteger>()).addQuestion(question));
     }
     
     private void addForm(Pane pane, Form form)
     {
-    	pane.getChildren().add(new FormFeedView(handler).addForm(form));
+    	pane.getChildren().add(new FormFeedView(handler, new ArrayList<BigInteger>()).addForm(form));
     }
     
     private void addText(Pane pane, String string)

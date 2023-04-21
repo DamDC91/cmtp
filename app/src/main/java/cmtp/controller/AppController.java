@@ -2,6 +2,7 @@ package cmtp.controller;
 
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -72,34 +73,33 @@ public class AppController {
     	return replies;
     }
     
-    private ArrayList<Question> getAllQuestionsUnansweredFromForm(Form f, Set<Question> questionsAnswered)
+    private ArrayList<QuestionWithIds> getAllQuestionsUnansweredFromForm(Form f, ArrayList<BigInteger> formIds,  Set<Question> questionsAnswered)
     {
-    	ArrayList<Question> questionsUnanswered = new ArrayList<Question>();
+    	ArrayList<QuestionWithIds> questionsUnanswered = new ArrayList<QuestionWithIds>();
+    	ArrayList<BigInteger> currentFormIds = (ArrayList<BigInteger>) formIds.clone();
+    	currentFormIds.add(new BigInteger(f.getId()));
     	for(Object o : f.getQuestionOrTextOrForm())
     	{
     		if(o instanceof Form)
-    			questionsAnswered.addAll(getAllQuestionsUnansweredFromForm((Form)o, questionsAnswered));
-    		else if(o instanceof Question)
-    			questionsUnanswered.add((Question)o);
+    			questionsUnanswered.addAll(getAllQuestionsUnansweredFromForm((Form)o, currentFormIds, questionsAnswered));
+    		else if(o instanceof Question && !questionsAnswered.contains((Question)o))
+    			questionsUnanswered.add(new QuestionWithIds((Question)o, currentFormIds));
     	}
     	return questionsUnanswered;
     }
     
-    private ArrayList<Question> getAllQuestionsUnanswered(Conv c)
+    private ArrayList<QuestionWithIds> getAllQuestionsUnanswered(Conv c)
     {
-    	Set<Question> questionsAnswered = getAllReplies(c).stream().map(e -> ReferenceResolver.getQuestion(c, e)).filter(e -> e.isPresent()).map(e -> e.get()).collect(Collectors.toSet());;
-    	
-    	System.out.println("questionAnswered" + questionsAnswered.size());
-    	System.out.println("null question " + getAllReplies(c).stream().map(e -> ReferenceResolver.getQuestion(c, e)).filter(e -> !e.isPresent()).collect(Collectors.toSet()).size());
-    	ArrayList<Question> questionsUnanswered = new ArrayList<Question>();
+    	Set<Question> questionsAnswered = getAllReplies(c).stream().map(e -> ReferenceResolver.getQuestion(c, e)).filter(e -> e.isPresent()).map(e -> e.get()).collect(Collectors.toSet());
+    	ArrayList<QuestionWithIds> questionsUnanswered = new ArrayList<QuestionWithIds>();
     	
     	for(Msg msg : c.getMsg())
     		for(Object o : msg.getData().getQuestionOrReplyOrForm())
     		{
     			if(o instanceof Question && !questionsAnswered.contains((Question)o))
-    				questionsUnanswered.add((Question)o);
+    				questionsUnanswered.add(new QuestionWithIds((Question)o, new ArrayList<BigInteger>()));
     			else if(o instanceof Form)
-    				questionsUnanswered.addAll(getAllQuestionsUnansweredFromForm((Form) o, questionsAnswered));
+    				questionsUnanswered.addAll(getAllQuestionsUnansweredFromForm((Form) o, new ArrayList<BigInteger>(), questionsAnswered));
     		}
     	return questionsUnanswered;
     	
@@ -133,10 +133,10 @@ public class AppController {
     	Label l =(Label) questionFeed.getChildren().get(0);
     	questionFeed.getChildren().clear();
     	questionFeed.getChildren().add(l);
-    	QuestionFeedView v = new QuestionFeedView(x -> editController.addEditQuestion(x));
-    	for(Question q : getAllQuestionsUnanswered(c))
+    	for(QuestionWithIds q : getAllQuestionsUnanswered(c))
     	{
-    		questionFeed.getChildren().add(v.addQuestion(q));
+    		QuestionFeedView v = new QuestionFeedView(x -> editController.addEditQuestion(x), q.getParentIdList());
+    		questionFeed.getChildren().add(v.addQuestion(q.getQuestion()));
     	}
     	
     	

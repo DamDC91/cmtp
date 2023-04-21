@@ -29,5 +29,10 @@ public class QuestionWithIds {
 				.map(e -> e.toString())
 				.collect(Collectors.toList()));
 	}
+	
+	public ArrayList<BigInteger> getParentIdList()
+	{
+		return ids;
+	}
 
 }

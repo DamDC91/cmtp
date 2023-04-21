@@ -1,7 +1,10 @@
 package cmtp.view;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
+import cmtp.controller.QuestionWithIds;
 import generated.Form;
 import generated.Question;
 import javafx.scene.control.Label;
@@ -12,27 +15,30 @@ import javafx.scene.text.Text;
 
 public class FormFeedView {
 
-	private Consumer<Question> handler;
+	private Consumer<QuestionWithIds> handler;
+	private ArrayList<BigInteger> formIds;
+	private BigInteger currentFormId;
 	
-	public FormFeedView()
-	{
-		this.handler = null;
-	}
 	
-	public FormFeedView(Consumer<Question> handler)
+	public FormFeedView(Consumer<QuestionWithIds> handler, ArrayList<BigInteger> formIds)
 	{
 		this.handler = handler;
+		this.formIds = formIds;
 	}
 	
 	
     private void addQuestion(Pane pane, Question question)
     {
-    	pane.getChildren().add(new QuestionFeedView(handler).addQuestion(question));
+    	ArrayList<BigInteger> ids = (ArrayList<BigInteger>) formIds.clone();
+    	ids.add(currentFormId);
+    	pane.getChildren().add(new QuestionFeedView(handler, ids).addQuestion(question));
     }
     
     private void addForm(Pane pane, Form form)
     {
-    	pane.getChildren().add(new FormFeedView(handler).addForm(form));
+    	ArrayList<BigInteger> ids = (ArrayList<BigInteger>) formIds.clone();
+    	ids.add(currentFormId);
+    	pane.getChildren().add(new FormFeedView(handler, ids).addForm(form));
     }
     
     private void addText(Pane pane, String string)
@@ -62,6 +68,8 @@ public class FormFeedView {
 	{
 		VBox vbox = new VBox();
 		Pane pane = new AnchorPane(vbox);
+		
+		currentFormId = new BigInteger(f.getId());
 		
 		if(!f.getTitle().isBlank()) 
 		{

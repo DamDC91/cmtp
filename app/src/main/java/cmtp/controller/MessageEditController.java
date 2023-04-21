@@ -50,7 +50,7 @@ public class MessageEditController {
 	private Set<String> recipientNames;
 	
 	
-	private Map<AnswerEditView, Question> answerToQuestion;
+	private Map<AnswerEditView, QuestionWithIds> answerToQuestion;
 	
 	
 	private ArrayList<Object> msgElements;
@@ -62,7 +62,7 @@ public class MessageEditController {
 		 recipientNames = new HashSet<String>();
 		 msgElements = new ArrayList<Object>();
 		 msgElements.add(firstExpandableTextArea);
-		 answerToQuestion = new HashMap<AnswerEditView, Question>();
+		 answerToQuestion = new HashMap<AnswerEditView, QuestionWithIds>();
 		 Set<String> plugins = PluginManager.getAllPlugins();
 		 for(String name : plugins)		 
 			 pluginChoiceBox.getItems().add(name);
@@ -104,12 +104,12 @@ public class MessageEditController {
 		 this.convId = id;
 	 }
 	 
-	 public void addEditQuestion(Question q)
+	 public void addEditQuestion(QuestionWithIds q)
 	 {
 		 AnswerEditView answerView = new AnswerEditView();
 		 msgElements.add(answerView);
 		 answerToQuestion.put(answerView, q);
-		 vbox.getChildren().add(vbox.getChildren().size()-2, answerView.addQuestion(q));
+		 vbox.getChildren().add(vbox.getChildren().size()-2, answerView.addQuestion(q.getQuestion()));
 		 ExpandableTextArea text = new ExpandableTextArea("", true, false, 3, 300);
 		 vbox.getChildren().add(vbox.getChildren().size()-2, text);
 		 msgElements.add(text);
@@ -146,8 +146,8 @@ public class MessageEditController {
 			 {
 				 Reply reply = new Reply();
 				 AnswerEditView answerEditView = (AnswerEditView)o;
-				 Question q = answerToQuestion.get(answerEditView);
-				 reply.setQuestionId(q.getId());
+				 Question q = answerToQuestion.get(answerEditView).getQuestion();
+				 reply.setQuestionId(answerToQuestion.get(answerEditView).getFullId());
 				 if(q.getTextInput() != null)
 				 {
 					 ReplyText r =  new ReplyText();
