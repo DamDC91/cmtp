@@ -41,3 +41,7 @@ xjc {
     srcDirName.set("../../../message-specs/schemas")
 }
 
+tasks.withType<JavaExec> {
+    systemProperty("file.encoding", "UTF-8")
+}
+
